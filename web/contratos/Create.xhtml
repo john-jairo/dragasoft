@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ContratosCreateDlg" widgetVar="ContratosCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateContratosTitle}">
+            <h:form style="text-align: center" id="ContratosCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{contratosController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_codigoContrato}" for="codigoContrato" />
+                        <p:inputText id="codigoContrato" value="#{contratosController.selected.codigoContrato}" title="#{bundle.CreateContratosTitle_codigoContrato}" required="true" requiredMessage="#{bundle.CreateContratosRequiredMessage_codigoContrato}"/>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_sedeEntrega}" for="sedeEntrega" />
+                        <p:inputText id="sedeEntrega" value="#{contratosController.selected.sedeEntrega}" title="#{bundle.CreateContratosTitle_sedeEntrega}" />
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_duracion}" for="duracion" />
+                        <p:inputText id="duracion" value="#{contratosController.selected.duracion}" title="#{bundle.CreateContratosTitle_duracion}" />
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_entrega}" for="entrega" />
+                        <p:selectOneMenu id="entrega" value="#{contratosController.selected.entrega}" >
+                            <f:selectItems value="#{entregaController.itemsAvailableSelectOne}"
+                                           var="entregaItem"
+                                           itemValue="#{entregaItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_ciudadesCodigoMunicipio}" for="ciudadesCodigoMunicipio" />
+                        <p:selectOneMenu id="ciudadesCodigoMunicipio" value="#{contratosController.selected.ciudadesCodigoMunicipio}" required="true" requiredMessage="#{bundle.EditContratosRequiredMessage_ciudadesCodigoMunicipio}">
+                            <f:selectItems value="#{ciudadesController.itemsAvailableSelectOne}"
+                                           var="ciudadesCodigoMunicipioItem"
+                                           itemValue="#{ciudadesCodigoMunicipioItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_estadoContratoIdEstadoContrato}" for="estadoContratoIdEstadoContrato" />
+                        <p:selectOneMenu id="estadoContratoIdEstadoContrato" value="#{contratosController.selected.estadoContratoIdEstadoContrato}" required="true" requiredMessage="#{bundle.EditContratosRequiredMessage_estadoContratoIdEstadoContrato}">
+                            <f:selectItems value="#{estadoContratoController.itemsAvailableSelectOne}"
+                                           var="estadoContratoIdEstadoContratoItem"
+                                           itemValue="#{estadoContratoIdEstadoContratoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_inventarioCodigo}" for="inventarioCodigo" />
+                        <p:selectOneMenu id="inventarioCodigo" value="#{contratosController.selected.inventarioCodigo}" required="true" requiredMessage="#{bundle.EditContratosRequiredMessage_inventarioCodigo}">
+                            <f:selectItems value="#{inventarioController.itemsAvailableSelectOne}"
+                                           var="inventarioCodigoItem"
+                                           itemValue="#{inventarioCodigoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_jefeAdministrativoUsuariosIdUsuario}" for="jefeAdministrativoUsuariosIdUsuario" />
+                        <p:selectOneMenu id="jefeAdministrativoUsuariosIdUsuario" value="#{contratosController.selected.jefeAdministrativoUsuariosIdUsuario}" required="true" requiredMessage="#{bundle.EditContratosRequiredMessage_jefeAdministrativoUsuariosIdUsuario}">
+                            <f:selectItems value="#{jefeAdministrativoController.itemsAvailableSelectOne}"
+                                           var="jefeAdministrativoUsuariosIdUsuarioItem"
+                                           itemValue="#{jefeAdministrativoUsuariosIdUsuarioItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.CreateContratosLabel_tipoContratoIdTipoContrato}" for="tipoContratoIdTipoContrato" />
+                        <p:selectOneMenu id="tipoContratoIdTipoContrato" value="#{contratosController.selected.tipoContratoIdTipoContrato}" required="true" requiredMessage="#{bundle.EditContratosRequiredMessage_tipoContratoIdTipoContrato}">
+                            <f:selectItems value="#{tipoContratoController.itemsAvailableSelectOne}"
+                                           var="tipoContratoIdTipoContratoItem"
+                                           itemValue="#{tipoContratoIdTipoContratoItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton style="width: 70px" actionListener="#{contratosController.create}" value="#{bundle.Save}" update="display,:ContratosListForm:datalist,:growl" oncomplete="handleSubmit(args,'ContratosCreateDialog');"/>
+                    <p:commandButton style="width: 70px" value="#{bundle.Cancel}" onclick="ContratosCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

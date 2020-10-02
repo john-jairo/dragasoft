@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ClientesEditDlg" widgetVar="ClientesEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditClientesTitle}">
+            <h:form style="text-align: center" id="ClientesEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{clientesController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditClientesLabel_numeroDocumento}" for="numeroDocumento" />
+                        <p:inputText id="numeroDocumento" value="#{clientesController.selected.numeroDocumento}" title="#{bundle.EditClientesTitle_numeroDocumento}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_numeroDocumento}"/>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_primerNombre}" for="primerNombre" />
+                        <p:inputText id="primerNombre" value="#{clientesController.selected.primerNombre}" title="#{bundle.EditClientesTitle_primerNombre}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_primerNombre}"/>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_segundoNombre}" for="segundoNombre" />
+                        <p:inputText id="segundoNombre" value="#{clientesController.selected.segundoNombre}" title="#{bundle.EditClientesTitle_segundoNombre}" />
+                        <p:outputLabel value="#{bundle.EditClientesLabel_primerApellido}" for="primerApellido" />
+                        <p:inputText id="primerApellido" value="#{clientesController.selected.primerApellido}" title="#{bundle.EditClientesTitle_primerApellido}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_primerApellido}"/>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_segundoApellido}" for="segundoApellido" />
+                        <p:inputText id="segundoApellido" value="#{clientesController.selected.segundoApellido}" title="#{bundle.EditClientesTitle_segundoApellido}" />
+                        <p:outputLabel value="#{bundle.EditClientesLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{clientesController.selected.email}" title="#{bundle.EditClientesTitle_email}" />
+                        <p:outputLabel value="#{bundle.EditClientesLabel_telefono}" for="telefono" />
+                        <p:inputText id="telefono" value="#{clientesController.selected.telefono}" title="#{bundle.EditClientesTitle_telefono}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_telefono}"/>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_contratosCodigoContrato}" for="contratosCodigoContrato" />
+                        <p:selectOneMenu id="contratosCodigoContrato" value="#{clientesController.selected.contratosCodigoContrato}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_contratosCodigoContrato}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{contratosController.itemsAvailableSelectOne}"
+                                           var="contratosCodigoContratoItem"
+                                           itemValue="#{contratosCodigoContratoItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_tipoDocumentoIdTipoDoc}" for="tipoDocumentoIdTipoDoc" />
+                        <p:selectOneMenu id="tipoDocumentoIdTipoDoc" value="#{clientesController.selected.tipoDocumentoIdTipoDoc}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_tipoDocumentoIdTipoDoc}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{tipoDocumentoController.itemsAvailableSelectOne}"
+                                           var="tipoDocumentoIdTipoDocItem"
+                                           itemValue="#{tipoDocumentoIdTipoDocItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_usuariosIdUsuario}" for="usuariosIdUsuario" />
+                        <p:selectOneMenu id="usuariosIdUsuario" value="#{clientesController.selected.usuariosIdUsuario}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_usuariosIdUsuario}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{usuariosController.itemsAvailableSelectOne}"
+                                           var="usuariosIdUsuarioItem"
+                                           itemValue="#{usuariosIdUsuarioItem}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditClientesLabel_empresaNit}" for="empresaNit" />
+                        <p:selectOneMenu id="empresaNit" value="#{clientesController.selected.empresaNit}" required="true" requiredMessage="#{bundle.EditClientesRequiredMessage_empresaNit}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{empresaController.itemsAvailableSelectOne}"
+                                           var="empresaNitItem"
+                                           itemValue="#{empresaNitItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton style="width: 70px" actionListener="#{clientesController.update}" value="#{bundle.Save}" update="display,:ClientesListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ClientesEditDialog');"/>
+                    <p:commandButton style="width: 70px" value="#{bundle.Cancel}" onclick="ClientesEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

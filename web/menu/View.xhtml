@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MenuViewDlg" widgetVar="MenuViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewMenuTitle}">
+            <h:form id="MenuViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{menuController.selected != null}">
+                        <h:outputText value="#{bundle.ViewMenuLabel_codigo}"/>
+                        <h:outputText value="#{menuController.selected.codigo}" title="#{bundle.ViewMenuTitle_codigo}"/>
+                        <h:outputText value="#{bundle.ViewMenuLabel_nombre}"/>
+                        <h:outputText value="#{menuController.selected.nombre}" title="#{bundle.ViewMenuTitle_nombre}"/>
+                        <h:outputText value="#{bundle.ViewMenuLabel_tipo}"/>
+                        <h:outputText value="#{menuController.selected.tipo}" title="#{bundle.ViewMenuTitle_tipo}"/>
+                        <h:outputText value="#{bundle.ViewMenuLabel_tipoUsuario}"/>
+                        <h:outputText value="#{menuController.selected.tipoUsuario}" title="#{bundle.ViewMenuTitle_tipoUsuario}"/>
+                        <h:outputText value="#{bundle.ViewMenuLabel_estado}"/>
+                        <p:selectBooleanCheckbox value="#{menuController.selected.estado}" disabled="true"/>
+                        <h:outputText value="#{bundle.ViewMenuLabel_codigoSubmenu}"/>
+                        <h:outputText value="#{menuController.selected.codigoSubmenu}" title="#{bundle.ViewMenuTitle_codigoSubmenu}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="MenuViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
