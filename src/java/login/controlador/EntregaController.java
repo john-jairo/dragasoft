@@ -5,7 +5,13 @@ import login.controlador.util.JsfUtil;
 import login.controlador.util.JsfUtil.PersistAction;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +23,15 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.swing.JOptionPane;
 
 @Named("entregaController")
 @SessionScoped
@@ -54,6 +69,124 @@ public class EntregaController implements Serializable {
         return selected;
     }
 
+    public void notificar(){
+        Properties propiedad = new Properties();
+        propiedad.setProperty("mail.smtp.host", "smtp.gmail.com");
+        propiedad.setProperty("mail.smtp.starttls.enable", "true");
+        propiedad.setProperty("mail.smtp.port", "587");
+        propiedad.setProperty("mail.smtp.auth","true");
+        
+        Session sesion = Session.getDefaultInstance(propiedad);
+        
+        String correoEnvia = "ad.dragasoft@gmail.com";
+        String contrasena = "Dragasoft2020";
+        String destinatario = "abolivar.sena@gmail.com";
+        String asunto = "Prueba correo masivo";
+        String mensaje = "Prueba correo masivo gaes - Dragasoft";
+        
+        MimeMessage mail = new MimeMessage(sesion);
+        
+        try {
+            mail.setFrom(new InternetAddress (correoEnvia));
+            mail.addRecipient(Message.RecipientType.TO, new InternetAddress (destinatario));
+            mail.setSubject(asunto);
+            mail.setText(mensaje);
+            
+            Transport transporte = sesion.getTransport("smtp");
+            transporte.connect(correoEnvia, contrasena);
+            transporte.sendMessage(mail, mail.getRecipients(Message.RecipientType.TO));
+            transporte.close();
+            
+            JOptionPane.showMessageDialog(null, "Correo enviado");
+            
+        } catch (AddressException ex){
+            Logger.getLogger(EntregaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(EntregaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void correoMasivo () throws MessagingException{
+    
+        try {
+
+            PreparedStatement ps;
+            ResultSet rs;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+
+            String sql = "SELECT nombre, email FROM persona";
+            String[] correos_destinos = null;
+
+            try {
+                ps = con.prepareStatement(sql);
+                rs = ps.executeQuery();
+
+                ResultSetMetaData rd = rs.getMetaData(); // Obtenemos el metadata desde el resulset
+                int filas = rd.getColumnCount();
+                correos_destinos = new String[filas + 1];
+                int indice = 0;
+
+                while (rs.next()) {
+                    correos_destinos[indice] = rs.getString("email");
+                    indice++;
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(EntregaController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+//---------------------Email
+            Properties props = new Properties();
+            props.setProperty("mail.smtp.host", "smtp.gmail.com");
+            props.setProperty("mail.smtp.starttls.enable", "true");
+            props.setProperty("mail.smtp.port", "587");
+            props.setProperty("mail.smtp.auth", "true");
+            
+
+// Preparamos la sesion
+            Session session = Session.getDefaultInstance(props);
+
+//Recoger los datos
+            String correoRemitente = "ad.dragasoft@gmail.com";
+            String passRemitente = "Dragasoft2020";
+            String asunto = "Pruaba correos masivos";
+            String mensaje = "Hola<br>Se ha creado una nueva entrada en el inventario <b></b>.";
+
+// Construimos el mensaje
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(correoRemitente));
+
+            Address[] receptores = new Address[correos_destinos.length];
+            int j = 0;
+            while (j < correos_destinos.length) {
+                receptores[j] = new InternetAddress(correos_destinos[j]);
+                j++;
+            }
+
+//receptor.
+            message.addRecipients(Message.RecipientType.TO, receptores);
+            message.setSubject(asunto);
+            message.setText(mensaje, "ISO-8859-1", "html");
+
+            Transport t = session.getTransport("smtp");
+            t.connect(correoRemitente, passRemitente);
+            t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+
+// Cierre de la conexion.
+            t.close();
+            
+            System.out.println("Correo Electronico Enviado");
+
+        } catch (AddressException ex) {
+            Logger.getLogger(EntregaController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            Logger.getLogger(EntregaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("EntregaCreated"));
         if (!JsfUtil.isValidationFailed()) {
